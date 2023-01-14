@@ -57,9 +57,16 @@ class SequenceJsPlugin(BasePlugin):
                           config['site_dir'] + '/css/', False))
         files.append(File('diagram.js', JS_PATH,
                           config['site_dir'] + '/js/', False))
+        try:
+            os.makedirs(LIBS_PATH, exist_ok=True)
+        except OSError:
+            # We don't need this directory to exist, but if it does, we don't
+            # want to fail.
+            pass
 
-        for file in os.listdir(LIBS_PATH):
-            files.append(
-                File(file, LIBS_PATH, config['site_dir'] + '/js/', False))
+        if os.path.exists(LIBS_PATH) and os.path.isdir(LIBS_PATH):
+            for file in os.listdir(LIBS_PATH):
+                files.append(
+                    File(file, LIBS_PATH, config['site_dir'] + '/js/', False))
 
         return files
